@@ -1,279 +1,312 @@
-
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Веб-клікер</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Веб-клікер з промокодом</title>
+    <link href="https://fonts.googleapis.com/css2?family=Code+Pro:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* Загальний стиль для фону */
         body {
-            background: linear-gradient(135deg, #ffcc00, #ff6600);
-            font-family: 'Arial', sans-serif;
-            color: #fff; /* Білий колір тексту */
+            background: white;
+            font-family: 'Code Pro', sans-serif;
+            color: #000;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh; /* Висота вікна */
-            overflow: hidden; /* Сховати прокрутку */
-            position: relative; /* Для позиціювання елементів */
+            justify-content: flex-start;
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
         }
 
-        /* Текст "Листинг скоро!" */
-        .listing {
-            position: absolute; /* Позиціюємо текст */
-            top: 20px; /* Відступ зверху */
-            right: 20px; /* Відступ справа */
-            font-size: 24px; /* Розмір шрифту */
-            font-weight: bold; /* Жирний текст */
-            background: linear-gradient(90deg, #ff6600, #ffcc00); /* Градієнт */
-            -webkit-background-clip: text; /* Кліп для фону */
-            -webkit-text-fill-color: transparent; /* Робимо текст прозорим */
-            animation: pulse 2s infinite; /* Пульсуюча анімація */
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        /* Градієнтний текст */
         .gradient-text {
-            font-size: 48px; /* Розмір шрифту */
-            font-weight: bold; /* Жирний текст */
-            background: linear-gradient(90deg, #ff6600, #ffcc00); /* Градієнт від оранжевого до жовтого */
-            -webkit-background-clip: text; /* Кліп для фону */
-            -webkit-text-fill-color: transparent; /* Робимо текст прозорим */
-            text-align: center; /* Вирівнювання по центру */
-            margin-bottom: 20px; /* Відступи знизу */
+            font-size: 64px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff6600, #ffcc00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        /* Стилі для кнопок */
         button {
-            padding: 10px 20px;
-            font-size: 20px;
-            margin: 10px 0; /* Відступи зверху та знизу */
-            border-radius: 10px; /* Закруглені кути */
+            padding: 20px 40px;
+            font-size: 28px;
+            margin: 20px 0;
+            border-radius: 10px;
             cursor: pointer;
-            background-color: #ff6600; /* Основний колір кнопки */
-            color: white; /* Колір тексту кнопки */
-            border: none; /* Без границі */
-            transition: background-color 0.3s, transform 0.2s; /* Анімації */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тінь */
-            width: 100%; /* Ширина кнопок на всю ширину */
-            max-width: 300px; /* Максимальна ширина кнопок */
+            background: linear-gradient(135deg, #6a0dad, #a86bb1);
+            color: white;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
-            background-color: #ffcc00; /* Колір кнопки при наведенні */
-            transform: scale(1.05); /* Збільшуємо кнопку при наведенні */
+            opacity: 0.8;
+            transform: scale(1.05);
         }
 
-        /* Стиль для контейнера реєстрації */
-        .registration-container {
-            background-color: rgba(0, 0, 0, 0.9); /* Чорний фон з прозорістю */
-            border-radius: 20px; /* Закруглені кути */
-            padding: 20px; /* Внутрішні відступи */
-            position: absolute; /* Відносне позиціювання */
-            top: 0; /* Центруємо вертикально */
-            left: 0; /* Центруємо горизонтально */
-            height: 100vh; /* Висота на весь екран */
-            width: 100vw; /* Ширина на весь екран */
-            display: flex; /* Зміна на flex для вертикального центрування */
-            flex-direction: column; /* Вертикальне розташування полів вводу */
-            gap: 10px; /* Відстань між полями */
-            z-index: 10; /* Над усіма елементами */
-            align-items: center; /* Центруємо елементи */
-            justify-content: center; /* Центруємо елементи */
-            transition: opacity 1s ease; /* Анімація для переходу */
-        }
-
-        /* Стиль для круглих полів вводу */
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 80%; /* Ширина полів */
-            padding: 10px; /* Внутрішні відступи */
-            border-radius: 20px; /* Круглі кути */
-            border: 2px solid #ffcc00; /* Жовта рамка */
-            background-color: white; /* Білий фон */
-            color: #000; /* Чорний колір тексту */
-            font-size: 18px; /* Розмір шрифту */
-            transition: border 0.3s; /* Анімація для рамки */
-        }
-
-        /* Зміна кольору рамки при фокусі */
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #ff6600; /* Зміна кольору рамки на оранжевий при фокусі */
-            outline: none; /* Сховати контур */
-        }
-
-        /* Контейнер для клікера */
         .container {
-            max-width: 800px; /* Максимальна ширина для вирівнювання */
-            text-align: center; /* Центрування тексту */
-            display: none; /* Сховати контейнер з клікером спочатку */
+            max-width: 800px;
+            text-align: center;
         }
 
-        /* Стиль для тексту успішного входу */
-        .success-message {
-            font-size: 36px; /* Розмір шрифту */
-            margin-bottom: 20px; /* Відступи знизу */
+        #promoContainer {
+            margin-top: 40px;
         }
 
-        /* Стилі для секцій "О нас" і "Наш Телеграм" */
-        .info-section {
-            background-color: rgba(0, 0, 0, 0.8); /* Чорний фон з прозорістю */
-            padding: 15px; /* Внутрішні відступи */
-            border-radius: 20px; /* Закруглені кути */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Тінь */
-            font-size: 14px; /* Розмір шрифту */
-            margin: 10px 0; /* Відступи зверху та знизу */
-            text-align: center; /* Центрування тексту */
-            max-width: 300px; /* Максимальна ширина секцій */
-            margin-left: 20px; /* Добавлено отступ слева */
-            margin-right: auto; /* Центруємо секції */
-            transition: max-height 0.3s ease-out, opacity 0.3s ease-out; /* Анімація для розміру та прозорості */
-            max-height: 0; /* Секції спочатку сховані */
-            opacity: 0; /* Секції спочатку прозорі */
-            overflow: hidden; /* Сховати переповнене вміст */
+        input {
+            padding: 15px;
+            font-size: 20px;
+            border-radius: 10px;
+            border: 2px solid #ffcc00;
+            width: 80%;
+            margin-bottom: 20px;
         }
 
-        /* Клас для відображення секцій */
-        .info-section.show {
-            max-height: 500px; /* Максимальна висота, щоб показати вміст */
-            opacity: 1; /* Повна непрозорість */
+        .coin-icon {
+            width: 30px;
+            height: 30px;
+            transition: transform 0.2s;
+            display: inline-block;
+            vertical-align: middle;
         }
 
-        /* Стиль для кнопки меню */
-        #menuButton {
-            background-color: #ffcc00; /* Основний колір кнопки меню */
-            border: none; /* Без границі */
-            border-radius: 10px; /* Закруглені кути */
-            color: #000; /* Чорний колір тексту */
-            padding: 10px 20px; /* Внутрішні відступи */
-            font-size: 20px; /* Розмір шрифту */
-            cursor: pointer; /* Курсор вказує на кнопку */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тінь */
-            transition: background-color 0.3s, transform 0.2s; /* Анімації */
-            width: 100%; /* Ширина кнопки на всю ширину */
-            max-width: 300px; /* Максимальна ширина кнопки */
+        .social-icon {
+            position: fixed;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s; /* Плавна анімація для збільшення */
         }
 
-        #menuButton:hover {
-            background-color: #ffb300; /* Колір кнопки меню при наведенні */
+        .telegram-icon { top: 20px; }
+        .discord-icon { top: 80px; }
+        .youtube-icon { top: 140px; }
+
+        #premiumMenu {
+            margin-top: 40px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            color: white;
+            width: 300px;
+            text-align: center;
+            position: relative;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 40px;
         }
 
-        /* Стиль для кнопки виходу */
-        #exitButton {
-            background-color: #ff6600; /* Основний колір кнопки виходу */
-            border: none; /* Без границі */
-            border-radius: 10px; /* Закруглені кути */
-            color: #fff; /* Білий колір тексту */
-            padding: 10px 20px; /* Внутрішні відступи */
-            font-size: 20px; /* Розмір шрифту */
-            cursor: pointer; /* Курсор вказує на кнопку */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тінь */
-            transition: background-color 0.3s, transform 0.2s; /* Анімації */
-            width: 100%; /* Ширина кнопки на всю ширину */
-            max-width: 300px; /* Максимальна ширина кнопки */
+        #premiumMenu h3 {
+            margin-bottom: 20px;
         }
 
-        #exitButton:hover {
-            background-color: #cc5200; /* Колір кнопки виходу при наведенні */
+        #stretchable {
+            height: 200vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
         }
 
-        /* Стиль для нижнього тексту */
-        .footer-text {
-            font-size: 12px; /* Розмір шрифту */
-            position: absolute; /* Позиціювання внизу */
-            bottom: 20px; /* Відступ знизу */
-            text-align: center; /* Центрування тексту */
-            width: 100%; /* Ширина на всю ширину */
+        .content-container {
+            padding-bottom: 40px;
+        }
+
+        /* Стиль для інформаційної іконки */
+        #infoIcon {
+            width: 50px;
+            height: 50px;
+            position: fixed;
+            left: 20px;
+            top: 20px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+
+        /* Стиль для інформаційного повідомлення */
+        #infoMessage {
+            display: none;
+            position: fixed;
+            left: 50%;
+            bottom: -100px; /* Сховано за межами екрану */
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 300px;
+            text-align: center;
+            transform: translateX(-50%);
+            transition: bottom 0.5s ease-in-out; /* Анімація для появи */
+            z-index: 1001;
+        }
+
+        /* Збільшення іконок при наведенні */
+        .social-icon:hover {
+            transform: scale(1.1); /* Збільшення на 10% */
         }
     </style>
 </head>
 <body>
-    <div class="listing">Листинг скоро!</div>
     <div class="gradient-text">Boom Coin!</div>
-    <button id="menuButton">Показати меню</button>
 
-    <div class="registration-container" id="registrationContainer">
-        <input type="text" id="username" placeholder="Ваше ім'я" required>
-        <input type="password" id="password" placeholder="Пароль" required>
-        <button id="submitButton">Увійти</button>
-        <button id="exitButton" onclick="window.location.href='https://www.google.com'">Вихід</button>
-    </div>
+    <div class="container" id="stretchable">
+        <div class="content-container">
+            <button id="clickButton">BOOM COIN</button>
+            <div id="score" style="font-size: 24px; margin-top: 20px;">
+                Кількість монет: <span id="coinCount">0</span> <img src="https://pngimg.com/uploads/coin/coin_PNG36907.png" class="coin-icon" id="coinIcon" alt="Coin Icon">
+            </div>
+            <div id="remainingClicks" style="font-size: 24px; margin-top: 20px;">500</div>
 
-    <div class="container" id="clickerContainer">
-        <div class="success-message" id="successMessage"></div>
-        <button id="clickButton">Клікни мене!</button>
-        <div id="score">Кількість кліків: 0</div>
-        <div id="infoContainer">
-            <div class="info-section" id="aboutSection">
-                <h3>Про нас</h3>
-                <p>Ми - команда розробників, яка створює інноваційні ігри для вас!</p>
+            <div id="promoContainer">
+                <input type="text" id="promoCodeInput" placeholder="Введіть промокод">
+                <button id="promoButton">Активувати промокод</button>
             </div>
-            <div class="info-section" id="telegramSection">
-                <h3>Наш Телеграм</h3>
-                <p>Приєднуйтесь до нас на <a href="https://t.me/BoomCointg" style="color: #ffcc00;">Telegram</a></p>
-            </div>
+        </div>
+
+        <div id="premiumMenu">
+            <h3>Купити Premium</h3>
+            <button id="buyPremiumButton">Придбати за 1000 монет</button>
+            <button id="buyPremiumPlusButton">Придбати Plus за 5000 монет</button>
         </div>
     </div>
 
-    <div class="footer-text">Создано компанией BOOM</div> <!-- Додано текст у футері -->
+    <a href="https://t.me/BoomCointg" target="_blank">
+        <img src="https://th.bing.com/th/id/OIP.-SuPUHwvPPFtqELxpC4VIAAAAA?rs=1&pid=ImgDetMain" alt="Telegram" class="telegram-icon social-icon">
+    </a>
+
+    <a href="https://discord.gg/8nkXG24D" target="_blank">
+        <img src="https://cdn.icon-icons.com/icons2/3053/PNG/512/discord_alt_macos_bigsur_icon_190236.png" alt="Discord" class="discord-icon social-icon">
+    </a>
+    
+    <a href="https://www.youtube.com/channel/UCMnL8E593R05RIHvROgVJXw" target="_blank">
+        <img src="https://th.bing.com/th/id/OIP.pGpI5BwqO2ZEja60q2CygQHaHa?rs=1&pid=ImgDetMain" alt="Youtube" class="youtube-icon social-icon">
+    </a>
+
+    <audio id="backgroundMusic" loop>
+        <source src="">
+        Ваш браузер не підтримує аудіо.
+    </audio>
+
+    <div id="infoMessage">Ми включаем вам відео CUMBACK кожні 5 хвилин, так як це є безкоштовна інтеграція для NEKOGLAI.</div>
+    <img id="infoIcon" src="https://e7.pngegg.com/pngimages/319/686/png-clipart-computer-icons-scalable-graphics-information-system-information-overload-black-and-white-system-information.png" alt="Info Icon">
 
     <script>
-        let score = 0;
+        const scoreKey = 'coinScore';
+        const remainingClicksKey = 'remainingClicks';
+        const premiumKey = 'premiumStatus';
 
-        const clickButton = document.getElementById('clickButton');
-        const scoreDisplay = document.getElementById('score');
-        const successMessage = document.getElementById('successMessage');
-        const registrationContainer = document.getElementById('registrationContainer');
-        const clickerContainer = document.getElementById('clickerContainer');
-        const menuButton = document.getElementById('menuButton');
-        const aboutSection = document.getElementById('aboutSection');
-        const telegramSection = document.getElementById('telegramSection');
+        let coinScore = localStorage.getItem(scoreKey) ? parseInt(localStorage.getItem(scoreKey)) : 0;
+        let remainingClicks = localStorage.getItem(remainingClicksKey) ? parseInt(localStorage.getItem(remainingClicksKey)) : 500;
+        let premiumStatus = localStorage.getItem(premiumKey) === 'true';
 
-        // Функція для оновлення рахунку
-        function updateScore() {
-            score++;
-            scoreDisplay.innerText = "Кількість кліків: " + score;
-        }
+        document.getElementById('coinCount').textContent = coinScore;
+        document.getElementById('remainingClicks').textContent = remainingClicks;
 
-        // Обробник кліку на кнопку
-        clickButton.addEventListener('click', () => {
-            updateScore();
-        });
+        document.getElementById('backgroundMusic').play();
 
-        // Обробник для кнопки "Увійти"
-        document.getElementById('submitButton').addEventListener('click', () => {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+        document.getElementById('clickButton').addEventListener('click', function() {
+            if (remainingClicks > 0) {
+                coinScore++;
+                remainingClicks--;
+                document.getElementById('coinCount').textContent = coinScore;
+                document.getElementById('remainingClicks').textContent = remainingClicks;
+                
+                localStorage.setItem(scoreKey, coinScore);
+                localStorage.setItem(remainingClicksKey, remainingClicks);
 
-            if (username && password) {
-                successMessage.innerText = "Вітаємо, " + username + "!";
-                registrationContainer.style.display = 'none';
-                clickerContainer.style.display = 'block';
+                const coinIcon = document.getElementById('coinIcon');
+                coinIcon.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    coinIcon.style.transform = 'scale(1)';
+                }, 200);
             } else {
-                alert('Будь ласка, введіть ваше ім\'я та пароль!');
+                alert('Ви вичерпали кількість кліків!');
             }
         });
 
-        // Обробник для кнопки "Меню"
-        menuButton.addEventListener('click', () => {
-            const sections = [aboutSection, telegramSection];
-            sections.forEach(section => section.classList.toggle('show'));
+        const promoCodes = [
+            'BOOMABC', 'BOOMDEF', 'BOOMGHI', 'BOOMJKL', 'BOOMMNO',
+            'BOOMPQR', 'BOOMSTU', 'BOOMVWX', 'BOOMYZA', 'BOOMXYZ',
+            'FREECOIN', 'BONUS100'
+        ];
+
+        document.getElementById('promoButton').addEventListener('click', function() {
+            const promoCode = document.getElementById('promoCodeInput').value.toUpperCase();
+            if (promoCodes.includes(promoCode)) {
+                alert('Промокод активовано! Ви отримали 100 монет.');
+                coinScore += 100;
+                document.getElementById('coinCount').textContent = coinScore;
+                localStorage.setItem(scoreKey, coinScore);
+            } else {
+                alert('Неправильний промокод.');
+            }
+            document.getElementById('promoCodeInput').value = '';
         });
+
+        document.getElementById('buyPremiumButton').addEventListener('click', function() {
+            if (coinScore >= 1000 && !premiumStatus) {
+                coinScore -= 1000;
+                premiumStatus = true;
+                document.getElementById('coinCount').textContent = coinScore;
+                localStorage.setItem(scoreKey, coinScore);
+                localStorage.setItem(premiumKey, premiumStatus);
+                alert('Ви придбали Premium!');
+            } else if (premiumStatus) {
+                alert('Ви вже маєте Premium.');
+            } else {
+                alert('Не вистачає монет для покупки Premium.');
+            }
+        });
+
+        document.getElementById('buyPremiumPlusButton').addEventListener('click', function() {
+            if (coinScore >= 5000 && !premiumStatus) {
+                coinScore -= 5000;
+                premiumStatus = true;
+                document.getElementById('coinCount').textContent = coinScore;
+                localStorage.setItem(scoreKey, coinScore);
+                localStorage.setItem(premiumKey, premiumStatus);
+                alert('Ви придбали Premium Plus!');
+            } else if (premiumStatus) {
+                alert('Ви вже маєте Premium Plus.');
+            } else {
+                alert('Не вистачає монет для покупки Premium Plus.');
+            }
+        });
+
+        // Відкриваємо інформаційне повідомлення з анімацією
+        document.getElementById('infoIcon').addEventListener('click', function() {
+            const infoMessage = document.getElementById('infoMessage');
+            infoMessage.style.display = 'block';
+            infoMessage.style.bottom = '20px'; // Показуємо повідомлення
+            setTimeout(() => {
+                infoMessage.style.bottom = '-100px'; // Сховати через 3 секунди
+            }, 3000); // Залишаємо на 3 секунди
+            setTimeout(() => {
+                infoMessage.style.display = 'none'; // Сховати після анімації
+            }, 3500); // Чекаємо 3.5 секунди, щоб завершити анімацію
+        });
+
+        // Відкриваємо відео кожні 5 хвилин
+        setInterval(() => {
+            const videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Заміна на ваше відео
+            window.open(videoUrl, '_blank');
+        }, 300000); // 5 хвилин у мілісекундах (300000)
+
+        // Зберігаємо дані в localStorage
+        window.onbeforeunload = function() {
+            localStorage.setItem(scoreKey, coinScore);
+            localStorage.setItem(remainingClicksKey, remainingClicks);
+            localStorage.setItem(premiumKey, premiumStatus);
+        };
     </script>
 </body>
 </html>
